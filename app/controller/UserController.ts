@@ -1,9 +1,21 @@
 import { Request, Response } from "express";
+import UserSchema from "../schema/UserSchema";
+import { Schema } from "mongoose";
 
-class Controller {
-    public async index(req: Request, res: Response){
-        return res.status(201).json({test: "hello word"})
+class UserController {
+    public async index(req: Request, res: Response): Promise<Response>{
+        let status: number
+        let result: any
+
+        try {
+            result = await UserSchema.find()
+            status = 201
+        } catch (error) {
+            result = {error: error}
+            status = 500
+        }
+        return res.status(status).json(result)
     }
 }
 
-export default new Controller()
+export default new UserController()

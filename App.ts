@@ -16,9 +16,9 @@ export default class App {
     public constructor() {
         this.app = express()
 
+        this.database()
         this.middleware()
         this.routes()
-        this.database()
     }
 
     /**
@@ -38,9 +38,9 @@ export default class App {
     /**
      * Função de configuração do banco de dados
      */
-    private database(): void {
+    private async database() {
         try {
-            mongoose.connect(
+            await mongoose.connect(
                  this.mongoURL,
                  { useNewUrlParser: true, useUnifiedTopology: true },
                  () => console.log('banco conectado!')

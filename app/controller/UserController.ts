@@ -12,6 +12,7 @@ class UserController {
             status = 201
         } catch (error) {
             result = {error: error}
+            console.log(error)
             status = 500
         }
         return res.status(status).json(result)

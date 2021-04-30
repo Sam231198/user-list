@@ -10,4 +10,4 @@ const UserSchema = new Schema({
     timestamps: true
 })
 
-export default model('User', UserSchema)
+export default model('users', UserSchema)

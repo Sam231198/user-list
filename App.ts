@@ -9,7 +9,7 @@ export default class App {
      * Variavel com o link de conexão de banco do mango db
      * @var string
      */
-    private mongoURL = 'mongodb+srv://samuel:2398emanuel@cluster0.rdblz.gcp.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+    private mongoURL = 'mongodb+srv://samuel:2398emanuel@cluster0.rdblz.mongodb.net/develop?retryWrites=true&w=majority'
 
     public app: express.Application
 

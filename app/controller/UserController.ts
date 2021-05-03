@@ -1,21 +1,45 @@
 import { Request, Response } from "express";
 import UserSchema from "../schema/UserSchema";
-import { Schema } from "mongoose";
+import { validationResult } from "express-validator";
 
 class UserController {
-    public async index(req: Request, res: Response): Promise<Response>{
-        let status: number
-        let result: any
+    public async index(req: Request, res: Response): Promise<Response> {
 
         try {
-            result = await UserSchema.find()
-            status = 201
+            let result = await UserSchema
+                .find().exec(function (error, userSchema) {
+                    userSchema.fullName();
+                })
+
+            return res.status(201).json(result)
         } catch (error) {
-            result = {error: error}
             console.log(error)
-            status = 500
+            return res.status(500).json(error)
         }
-        return res.status(status).json(result)
+    }
+
+    public async story(req: Request, res: Response): Promise<Response> {
+
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+
+
+        try {
+            const newUser = new UserSchema({
+                name: req.body.name,
+                lastname: req.body.lastname,
+                nickname: req.body.nickname,
+                address: req.body.address,
+                bio: req.body.bio,
+            })
+
+            return res.status(201).json(newUser.save())
+        } catch (error) {
+            return res.status(201).json(error)
+        }
     }
 }
 

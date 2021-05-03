@@ -1,4 +1,9 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, Document } from "mongoose";
+import UserInterface from "../types/UserInterface"
+
+interface UsersModelInteraface extends UserInterface, Document {
+    fullName(): any
+}
 
 const UserSchema = new Schema({
     name: String,
@@ -10,4 +15,8 @@ const UserSchema = new Schema({
     timestamps: true
 })
 
-export default model('users', UserSchema)
+UserSchema.methods.fullName = function (this: UsersModelInteraface): any {
+    return this.name + ' ' + this.lastname
+}
+
+export default model<UsersModelInteraface>('users', UserSchema)

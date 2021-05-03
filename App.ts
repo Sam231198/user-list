@@ -4,7 +4,7 @@ import routes from './router/routes'
 import mongoose, { Mongoose } from 'mongoose'
 
 export default class App {
-    
+
     /**
      * Variavel com o link de conexão de banco do mango db
      * @var string
@@ -41,10 +41,17 @@ export default class App {
     private async database() {
         try {
             await mongoose.connect(
-                 this.mongoURL,
-                 { useNewUrlParser: true, useUnifiedTopology: true },
-                 () => console.log('banco conectado!')
-             )
+                this.mongoURL,
+                { useNewUrlParser: true, useUnifiedTopology: true },
+                () => console.log('banco conectado!')
+            )
+
+            //Get the default connection
+            var db = mongoose.connection;
+
+            //Bind connection to error event (to get notification of connection errors)
+            db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+
         } catch (error) {
             console.log(`Conection fail: ${error}`)
         }

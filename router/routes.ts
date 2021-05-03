@@ -23,13 +23,36 @@ routes.post('/',
         UserController.story(req, res)
     })
 
-routes.get("/search-name",
+// /searchUsers?name={Value}&lastname={Value}
+routes.get("/searchUsers",
     [
         param("name").isString().optional(),
         param("lastname").isString().optional()
     ],
-    (req: Request, res: Response) => {
-        UserController.searchNameLastName(req, res)
-    })
+    (req: Request, res: Response) => UserController.searchNameLastName(req, res))
+
+routes.get("/user/:nickname",
+    [
+        param("nickname").isString().notEmpty()
+    ],
+    (req: Request, res: Response) => UserController.returnUser(req, res))
+
+routes.put("/:id",
+    [
+        param("id").isString().notEmpty(),
+        body("name").isString().optional(),
+        body("lastname").isString().optional(),
+    ],
+    (req: Request, res: Response) => UserController.update(req, res))
+
+routes.put("/updateNickName/:id",
+    [
+        param("id").isString().notEmpty(),
+        body("nickname").isString().notEmpty()
+    ],
+    (req: Request, res: Response) => UserController.updateNickName(req, res))
+
+routes.delete("/delete/:id", [param("id").isString().notEmpty()],
+    (req: Request, res: Response) => UserController.deleteUser(req, res))
 
 export default routes

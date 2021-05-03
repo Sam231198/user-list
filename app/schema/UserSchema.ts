@@ -21,8 +21,4 @@ const UserSchema = new Schema({
     timestamps: true
 })
 
-// UserSchema.method('fullName', function (this: Document<IUserDoc> ): string {
-//     return this.name + " " + this.lastname
-// })
-
 export default model<IUserDoc>('users', UserSchema)

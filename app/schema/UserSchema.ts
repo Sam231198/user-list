@@ -1,22 +1,28 @@
 import { Schema, model, Document } from "mongoose";
-import UserInterface from "../types/UserInterface"
 
-interface UsersModelInteraface extends UserInterface, Document {
-    fullName(): any
+interface UsersInteraface {
+    name: string,
+    lastname: string,
+    nickname: string,
+    address: string,
+    bio?: string,
+    fullName(): string
 }
+
+interface IUserDoc extends UsersInteraface, Document {}
 
 const UserSchema = new Schema({
     name: String,
     lastname: String,
     nickname: String,
     address: String,
-    bio: String
+    bio: String,
 }, {
     timestamps: true
 })
 
-UserSchema.methods.fullName = function (this: UsersModelInteraface): any {
-    return this.name + ' ' + this.lastname
-}
+// UserSchema.method('fullName', function (this: Document<IUserDoc> ): string {
+//     return this.name + " " + this.lastname
+// })
 
-export default model<UsersModelInteraface>('users', UserSchema)
+export default model<IUserDoc>('users', UserSchema)

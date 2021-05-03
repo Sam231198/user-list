@@ -6,12 +6,7 @@ class UserController {
     public async index(req: Request, res: Response): Promise<Response> {
 
         try {
-            let result = await UserSchema
-                .find().exec(function (error, userSchema) {
-                    userSchema.fullName();
-                })
-
-            return res.status(201).json(result)
+            return res.status(201).json(await UserSchema.find())
         } catch (error) {
             console.log(error)
             return res.status(500).json(error)
@@ -21,11 +16,11 @@ class UserController {
     public async story(req: Request, res: Response): Promise<Response> {
 
         const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
-        }
 
-
+        if (!errors.isEmpty())
+            return res.status(400).json({ errors: errors.array() })
+        else if (await this.checkNickName(req.body.nickname))
+            return res.status(400).json({ errors: "nickname já existe" })
 
         try {
             const newUser = new UserSchema({
@@ -38,8 +33,13 @@ class UserController {
 
             return res.status(201).json(newUser.save())
         } catch (error) {
-            return res.status(201).json(error)
+            return res.status(500).json(error)
         }
+    }
+
+    private async checkNickName(nickname: string) {
+        let result = await UserSchema.findOne().where('nickname').equals(nickname)
+        return result == null ? false : true
     }
 }
 
